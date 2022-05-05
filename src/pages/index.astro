@@ -1,0 +1,22 @@
+---
+import { getTableContent } from '../lib/getTableData'
+
+const res = await getTableContent()
+const table = res.results
+---
+
+<html lang="en">
+  <head> </head>
+
+  <body>
+    {table.map((p) => (
+      <h2 class="title">{p.properties.title.title[0].plain_text}</h2>
+    ))}
+  </body>
+</html>
+
+<style>
+  .title {
+    font-size: 2rem;
+  }
+</style>
