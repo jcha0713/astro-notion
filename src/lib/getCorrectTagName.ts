@@ -1,3 +1,8 @@
+// A helper function that grabs correct HTML element name
+// from the type name provided by Notion API
+// e.g. paragraph -> p
+//
+// Later the correctTagName will be used as a prop for polymorphic components
 export function getCorrectTagName(type: string): string {
   const correctTagName = {
     paragraph: function () {

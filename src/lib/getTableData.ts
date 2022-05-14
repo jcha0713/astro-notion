@@ -34,6 +34,7 @@ export async function getTableContent(
     const databaseId = getDatabaseId();
     const notion = getNotionClient();
 
+    // this filters out the draft posts by default
     const queryObj = {
       database_id: databaseId,
       ...(!includeDraft && {
