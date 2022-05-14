@@ -1,0 +1,11 @@
+---
+import { getTableContent } from '../lib/getTableData';
+import { getBlockData } from '../lib/getBlockData';
+
+// This is only for testing
+const res = await getTableContent();
+const table = res.results;
+const sampleId = table[0].id;
+
+const blocks = await getBlockData(sampleId);
+---

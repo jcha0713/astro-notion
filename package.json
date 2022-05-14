@@ -6,10 +6,15 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "format": "prettier -w ."
   },
   "devDependencies": {
-    "astro": "^1.0.0-beta.14"
+    "astro": "^1.0.0-beta.14",
+    "astro-xelement": "^3.2.0",
+    "prettier": "^2.6.2",
+    "prettier-plugin-astro": "^0.0.12",
+    "sass": "^1.51.0"
   },
   "dependencies": {
     "@notionhq/client": "^1.0.4"

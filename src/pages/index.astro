@@ -1,17 +1,12 @@
 ---
-import { getTableContent } from '../lib/getTableData'
-
-const res = await getTableContent()
-const table = res.results
+import Notion from '../components/Notion.astro';
 ---
 
 <html lang="en">
   <head> </head>
 
   <body>
-    {table.map((p) => (
-      <h2 class="title">{p.properties.title.title[0].plain_text}</h2>
-    ))}
+    <Notion />
   </body>
 </html>
 
