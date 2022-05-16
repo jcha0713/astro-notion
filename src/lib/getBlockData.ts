@@ -1,8 +1,9 @@
 import { getBlockChildren } from './getBlockChildren';
-import { getNotionClient } from './notionClient';
 import { getCorrectTagName } from './getCorrectTagName';
+import { wrapBlocks } from './wrapBlocks';
+import { wrapBlocksReduce } from './wrapBlocksReduce';
 
-function fillRenderObj(type, tagObj) {
+function fillRenderObj(id, type, block) {
   const textBlocks = new Set([
     'paragraph',
     'heading_1',
@@ -15,62 +16,72 @@ function fillRenderObj(type, tagObj) {
     'code',
     'callout',
   ]);
+
   const renderMethod = {
     text: function () {
-      let textObj = Object.assign({}, tagObj);
+      let blockObj = Object.assign({}, block);
+      let textObj = blockObj[type];
       if (
         textObj.hasOwnProperty('rich_text') &&
         textObj?.rich_text.length > 1
       ) {
-        textObj['isNested'] = true;
+        textObj['hasSibling'] = true;
       }
+      textObj['id'] = id;
       textObj['original_tag'] = type;
       textObj['tag'] = getCorrectTagName(type);
-      return textObj;
+      return blockObj;
     },
   };
 
   return renderMethod['text']();
 }
 
+// Takes blockId, returns returns an array of block objects
 export async function getBlockData(blockId: string) {
-  const blocksToRender = [];
+  // This will be filled with block objects
+  // and returned at the end
+  let blocksToRender = [];
+
+  // gets the list of children(blocks) from a single blog post using blockId
   const blocks = await getBlockChildren(blockId);
 
-  blocks.forEach((block) => {
-    const { type } = block;
-    const renderObj = fillRenderObj(type, block[type]);
-    if (renderObj) {
-      blocksToRender.push(renderObj);
-    }
-  });
+  console.log(blocks);
 
-  const listTypes = new Set(['bulleted_list_item', 'numbered_list_item']);
-
-  blocksToRender.forEach((block, i, blocksToRender) => {
-    if (listTypes.has(block.original_tag)) {
-      if (i === 0 || !listTypes.has(blocksToRender[i - 1].original_tag)) {
-        let replaceCount = 0;
-        let startIndex = i;
-        const childList = [];
-        const listType = block.original_tag;
-        while (
-          i < blocksToRender.length &&
-          listTypes.has(blocksToRender[i].original_tag) &&
-          blocksToRender[i].original_tag === listType
-        ) {
-          replaceCount += 1;
-          childList.push(blocksToRender[i]);
-          i += 1;
-        }
-        blocksToRender.splice(startIndex, replaceCount, {
-          isNested: true,
-          tag: block.original_tag === 'bulleted_list_item' ? 'ul' : 'ol',
-          rich_text: childList,
+  const childBlocks = await Promise.all(
+    blocks
+      .filter((block) => block.has_children)
+      .map(async (block) => {
+        const { id } = block;
+        let children = await getBlockChildren(id);
+        children = children.map((child) => {
+          const { id, type } = child;
+          return fillRenderObj(id, type, child);
         });
-      }
-    }
+        return {
+          id: id,
+          children: children,
+        };
+      })
+  );
+
+  blocksToRender = blocks.map((block) => {
+    const { id, type } = block;
+
+    // if (block.has_children && !block[type].children) {
+    //   block[type]['children'] = wrapBlocks(
+    //     childBlocks.find((x) => x.id === block.id)?.children
+    //   );
+    //   block[type]['has_children'] = block.has_children;
+    // }
+
+    block = fillRenderObj(id, type, block);
+    return block;
   });
+
+  blocksToRender = wrapBlocks(blocksToRender);
+
+  // console.log('from blocksToRender', blocksToRender);
 
   return blocksToRender;
 }

@@ -1,6 +1,8 @@
 ---
 import { getTableContent } from '../lib/getTableData';
 import { getBlockData } from '../lib/getBlockData';
+import List from './List.astro';
+import Text from './Text.astro';
 
 // This is only for testing
 const res = await getTableContent();
@@ -8,4 +10,19 @@ const table = res.results;
 const sampleId = table[0].id;
 
 const blocks = await getBlockData(sampleId);
+
 ---
+
+{
+  blocks.map(block => {
+    let tag;
+    block?.isWrapped ?
+    tag = block.tag :
+    tag = block[block.type].tag
+    return (
+      tag === 'ul' || tag === 'ol' ?
+        <List as={tag} {block} /> :
+        <Text as={tag} {block} />
+    )
+  })
+}

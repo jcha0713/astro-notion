@@ -23,6 +23,12 @@ export function getCorrectTagName(type: string): string {
     numbered_list_item: function () {
       return 'li';
     },
+    quote: function () {
+      return 'blockquote';
+    },
+    code: function () {
+      return 'pre';
+    },
   };
   return correctTagName[type]();
 }

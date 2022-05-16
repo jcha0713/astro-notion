@@ -1,0 +1,26 @@
+---
+import Link from './Link.astro'
+const { as: Text = 'p', block } = Astro.props;
+
+console.log('from text: ', block)
+
+let textBlock;
+Text === 'li' ? textBlock = block : textBlock = block[block.type]
+const {href, plain_text} = textBlock.rich_text[0]
+
+---
+
+<Text>
+  {
+    textBlock.hasSibling
+      ? textBlock.rich_text.map((child) => (
+        child.href ?
+        <Link href={child.href} plain_text={child.plain_text} /> :
+        child.plain_text
+      ))
+      : href ? 
+      <Link {href} {plain_text} /> :
+      plain_text
+  }
+  <slot />
+</Text>
