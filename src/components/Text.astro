@@ -1,26 +1,23 @@
 ---
-import Link from './Link.astro'
+import Link from './Link.astro';
+import List from './List.astro';
 const { as: Text = 'p', block } = Astro.props;
-
-console.log('from text: ', block)
-
-let textBlock;
-Text === 'li' ? textBlock = block : textBlock = block[block.type]
-const {href, plain_text} = textBlock.rich_text[0]
 
 ---
 
+<List {block} is_first={true}/>
 <Text>
   {
-    textBlock.hasSibling
-      ? textBlock.rich_text.map((child) => (
-        child.href ?
-        <Link href={child.href} plain_text={child.plain_text} /> :
-        child.plain_text
-      ))
-      : href ? 
-      <Link {href} {plain_text} /> :
-      plain_text
+    block[block.type].rich_text.length > 1 ?
+    block[block.type].rich_text.map((sibling) => (
+      sibling.href ?
+      <Link href={sibling.href} plain_text={sibling.plain_text} /> :
+      sibling.plain_text
+    )) :
+    block[block.type].rich_text[0].href ?
+    <Link href={block[block.type].rich_text[0].href} plain_text={block[block.type].rich_text[0].plain_text} /> :
+    block[block.type].rich_text[0].plain_text
   }
   <slot />
 </Text>
+<List {block} is_last={true} />

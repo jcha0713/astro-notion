@@ -1,0 +1,13 @@
+---
+import Notion from './Notion.astro';
+import { getTableContent } from '../lib/getTableData';
+import { getBlockTree } from '../lib/getBlockTree';
+
+const res = await getTableContent();
+const table = res.results;
+const sampleId = table[0].id;
+
+const blocks = await getBlockTree(sampleId);
+---
+
+<Notion {blocks} />

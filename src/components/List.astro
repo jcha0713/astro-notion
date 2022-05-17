@@ -1,38 +1,12 @@
 ---
-import Text from './Text.astro'
-import { getBlockData } from '../lib/getBlockData'
-let { as: List = 'ul', block } = Astro.props;
+let { block, is_first, is_last } = Astro.props;
 
-console.log('block', block)
-
-if (block.has_children) {
-    block.rich_text = await Promise.all(block.rich_text.map(async (child) => {
-    child.rich_text[0]['children'] = await getBlockData(child.id)
-    console.log(child.rich_text[0].children[0])
-    return child
-  }))
-}
-
-if (!block.isWrapped) {
-  block = block[block.type]
-}
+const listType = block.type === 'bulleted_list_item' ? 'ul' : 'ol'
 
 ---
 
-<List>
-  {
-      block.rich_text.map((child) => {
-        const tag = child.tag;
-        console.log('child: ', child)
-        return (
-          child.rich_text[0]?.children?.length > 0 ?
-          (
-            <Text as={tag} block={child}>
-              <Astro.self block={child.rich_text[0].children[0]} />
-            </Text>
-          ) :
-          <Text as={tag} block={child} />
-        )
-      })
-  }
-</List>
+{
+  is_first ?
+  block[block.type].is_first && <Fragment set:html={`<${listType}>`} /> :
+  block[block.type].is_last && <Fragment set:html={`</${listType}>`} />
+}

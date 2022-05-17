@@ -1,28 +1,22 @@
 ---
-import { getTableContent } from '../lib/getTableData';
-import { getBlockData } from '../lib/getBlockData';
-import List from './List.astro';
 import Text from './Text.astro';
+import { getCorrectTagName } from '../lib/getCorrectTagName'
 
-// This is only for testing
-const res = await getTableContent();
-const table = res.results;
-const sampleId = table[0].id;
-
-const blocks = await getBlockData(sampleId);
+const {blocks} = Astro.props
 
 ---
 
 {
   blocks.map(block => {
-    let tag;
-    block?.isWrapped ?
-    tag = block.tag :
-    tag = block[block.type].tag
+    let tagName = getCorrectTagName(block.type);
     return (
-      tag === 'ul' || tag === 'ol' ?
-        <List as={tag} {block} /> :
-        <Text as={tag} {block} />
+      block.has_children 
+      ?
+      <Text as={tagName} {block}>
+        <Astro.self blocks={block[block.type].children} />
+      </Text> 
+      :
+      <Text as={tagName} {block} />
     )
   })
 }
