@@ -23,8 +23,8 @@ type tableProps = {
   includeDraft?: boolean;
 };
 
-// takes props for filtering options
-// returns contents in the database
+// Takes props for filtering options
+// Returns contents in the database
 // by default, it does not include the draft posts
 export async function getTableContent(
   props: tableProps = { includeDraft: false }
