@@ -5,25 +5,22 @@ const notion = getNotionClient();
 
 export async function getBlockChildren(blockId: string) {
   try {
-    // get a list of children blocks from a block using blockId
-    // and return the blocks
-
     const blocks = [];
-    let has_more_children = true;
+    let has_more_blocks = true;
     let cursor: string;
+    const max_page_limit = 100;
 
-    while (has_more_children) {
+    while (has_more_blocks) {
       const { results, next_cursor, has_more } =
         await notion.blocks.children.list({
           start_cursor: cursor,
           block_id: blockId,
+          page_size: max_page_limit,
         });
       blocks.push(...results);
 
-      if (!next_cursor) {
-        has_more_children = false;
-        cursor = next_cursor;
-      }
+      cursor = next_cursor;
+      has_more_blocks = has_more;
     }
     return blocks;
   } catch (error) {
