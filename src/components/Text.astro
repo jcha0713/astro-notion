@@ -1,23 +1,53 @@
 ---
 import Link from './Link.astro';
 import List from './List.astro';
+import { getClassAttribute } from '../lib/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
+
+let blockObjs = block[block.type].rich_text
+blockObjs = getClassAttribute(block)
+
+console.log(blockObjs)
 
 ---
 
-<List {block} is_first={true}/>
+// not sure if returning only half of the tag is okay
+<List {block} is_first={true} />
+
+// <Text> is a polymorphic component; it can be h1, h2, h3, p, blockquote, li, etc.
+// The default is set to <p>
 <Text>
   {
-    block[block.type].rich_text.length > 1 ?
-    block[block.type].rich_text.map((sibling) => (
-      sibling.href ?
-      <Link href={sibling.href} plain_text={sibling.plain_text} /> :
-      sibling.plain_text
-    )) :
-    block[block.type].rich_text[0].href ?
-    <Link href={block[block.type].rich_text[0].href} plain_text={block[block.type].rich_text[0].plain_text} /> :
-    block[block.type].rich_text[0].plain_text
+    blockObjs.map((blockObj) => (
+        <Link href={blockObj.href}>
+          {
+            blockObj.classList?.length > 0 ? 
+            <span class={blockObj.classList.join(' ')}>{blockObj.plain_text}</span> :
+            blockObj.plain_text // currently, <slot> gets rendered with trailing whitespaces when not wrapping it a tag
+          }
+        </Link>
+      ))
   }
   <slot />
 </Text>
 <List {block} is_last={true} />
+
+
+<style>
+  .notion-bold {
+    font-weight: bold;
+  }
+
+  .notion-italics {
+    font-style: italic;
+  }
+
+  .notion-underline {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .notion-strikethrough {
+    text-decoration: line-through;
+  }
+</style>

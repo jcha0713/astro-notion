@@ -1,21 +1,20 @@
 ---
 import Text from './Text.astro';
-import { getCorrectTagName } from '../lib/getCorrectTagName'
+import { getCorrectTagName } from '../lib/utils.ts'
 
-const {blocks} = Astro.props
+const { blocks } = Astro.props
 
 ---
 
 {
   blocks.map(block => {
-    let tagName = getCorrectTagName(block.type);
+    let tagName = getCorrectTagName(block, block.type);
     return (
-      block.has_children 
-      ?
+      // if block has children, recursively call this component again as a slot of <Text> component
+      block.has_children ?
       <Text as={tagName} {block}>
         <Astro.self blocks={block[block.type].children} />
-      </Text> 
-      :
+      </Text> :
       <Text as={tagName} {block} />
     )
   })
