@@ -1,0 +1,21 @@
+---
+import Text from './Text.astro';
+import { Img } from 'astro-imagetools/components';
+const { block } = Astro.props;
+
+console.log('block from figure: ', block);
+
+const imgObj = block[block.type];
+const type = block[block.type].type;
+
+console.log('caption: ', imgObj.caption);
+---
+
+<figure>
+  <Img
+    src={imgObj[type]?.url}
+    alt={`${imgObj.caption[0].plain_text || 'An image from notion'}`}
+    loading="lazy"
+  />
+  <Text as={'figcaption'} {block} />
+</figure>

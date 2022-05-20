@@ -4,28 +4,32 @@ import List from './List.astro';
 import { getClassAttribute } from '../lib/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
 
-let blockObjs = block[block.type].rich_text
-blockObjs = getClassAttribute(block)
-
-console.log(blockObjs)
+let objType: string;
+Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
+let blockObjs = block[block.type][objType]
+blockObjs = getClassAttribute(block, objType)
 
 ---
 
-// not sure if returning only half of the tag is okay
 <List {block} is_first={true} />
-
-// <Text> is a polymorphic component; it can be h1, h2, h3, p, blockquote, li, etc.
-// The default is set to <p>
 <Text>
   {
     blockObjs.map((blockObj) => (
-        <Link href={blockObj.href}>
+        blockObj.href ?
+        (<Link href={blockObj.href}>
           {
             blockObj.classList?.length > 0 ? 
             <span class={blockObj.classList.join(' ')}>{blockObj.plain_text}</span> :
-            blockObj.plain_text // currently, <slot> gets rendered with trailing whitespaces when not wrapping it a tag
+            blockObj.plain_text
           }
-        </Link>
+        </Link>) :
+        (<Fragment>
+          {
+            blockObj.classList?.length > 0 ? 
+            <span class={blockObj.classList.join(' ')}>{blockObj.plain_text}</span> :
+            blockObj.plain_text 
+          }
+        </Fragment>)
       ))
   }
   <slot />

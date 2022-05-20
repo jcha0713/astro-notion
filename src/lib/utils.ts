@@ -1,5 +1,5 @@
-export function getClassAttribute(block) {
-  let textObjs = block[block.type].rich_text;
+export function getClassAttribute(block, objType) {
+  let textObjs = block[block.type][objType];
 
   function getClassArray(textObj) {
     let attrs = [];
@@ -66,6 +66,9 @@ export function getCorrectTagName(block, type: string): string {
     },
     callout: function () {
       return 'div';
+    },
+    image: function () {
+      return 'figure';
     },
   };
   return correctTagName[type]();

@@ -1,5 +1,6 @@
 ---
 import Text from './Text.astro';
+import Figure from './Figure.astro'
 import { getCorrectTagName } from '../lib/utils.ts'
 
 const { blocks } = Astro.props
@@ -11,10 +12,12 @@ const { blocks } = Astro.props
     let tagName = getCorrectTagName(block, block.type);
     return (
       // if block has children, recursively call this component again as a slot of <Text> component
-      block.has_children ?
+      block?.has_children ?
       <Text as={tagName} {block}>
         <Astro.self blocks={block[block.type].children} />
       </Text> :
+      tagName === 'figure' ?
+      <Figure {block} /> :
       <Text as={tagName} {block} />
     )
   })
