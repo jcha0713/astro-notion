@@ -16,6 +16,7 @@
     "sass": "^1.51.0"
   },
   "dependencies": {
-    "@notionhq/client": "^1.0.4"
+    "@notionhq/client": "^1.0.4",
+    "astro-imagetools": "^0.6.5"
   }
 }
