@@ -1,5 +1,4 @@
 ---
-import Link from './Link.astro';
 import List from './List.astro';
 import { getClassAttribute } from '../lib/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
@@ -9,35 +8,41 @@ Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
 let blockObjs = block[block.type][objType]
 blockObjs = getClassAttribute(block, objType)
 
+const getStyles = (blockObj) => {
+  let styles = '';
+  if (blockObj.classList?.length > 0) {
+    styles = blockObj.classList.join(' ')
+  }
+  return styles && `class='${styles}'`
+}
+
+const getLink = (blockObj) => {
+  return (
+    `<a href=${blockObj.href} ${getStyles(blockObj)} >${blockObj.plain_text}</a>`
+  )
+}
+
+const getText = (blockObj) => {
+  return (
+    `<span ${getStyles(blockObj)}>${blockObj.plain_text}</span>`
+  )
+}
+
 ---
 
 <List {block} is_first={true} />
 <Text>
   {
     blockObjs.map((blockObj) => (
-        blockObj.href ?
-        (<Link href={blockObj.href}>
-          {
-            blockObj.classList?.length > 0 ? 
-            <span class={blockObj.classList.join(' ')}>{blockObj.plain_text}</span> :
-            blockObj.plain_text
-          }
-        </Link>) :
-        (<Fragment>
-          {
-            blockObj.classList?.length > 0 ? 
-            <span class={blockObj.classList.join(' ')}>{blockObj.plain_text}</span> :
-            blockObj.plain_text 
-          }
-        </Fragment>)
-      ))
+      <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
+    ))
   }
   <slot />
 </Text>
 <List {block} is_last={true} />
 
 
-<style>
+<style is:global>
   .notion-bold {
     font-weight: bold;
   }
