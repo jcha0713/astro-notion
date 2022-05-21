@@ -1,9 +1,19 @@
 ---
 import Text from './Text.astro';
-import Figure from './Figure.astro'
+import NonText from './NonText.astro'
 import { getCorrectTagName } from '../lib/utils.ts'
 
+const textTypes = new Set(['h1', 'h2', 'h3', 'p', 'li', 'blockquote', 'pre', 'div']);
+
+
 const { blocks } = Astro.props
+
+function isEmpty(obj) {
+  for (const property in obj) {
+    return false;
+  }
+  return true;
+}
 
 ---
 
@@ -16,8 +26,8 @@ const { blocks } = Astro.props
       <Text as={tagName} {block}>
         <Astro.self blocks={block[block.type].children} />
       </Text> :
-      tagName === 'figure' ?
-      <Figure {block} /> :
+      !textTypes.has(tagName) ?
+      <NonText as={tagName} {block} /> :
       <Text as={tagName} {block} />
     )
   })

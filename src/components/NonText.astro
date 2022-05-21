@@ -1,0 +1,24 @@
+---
+import Text from './Text.astro';
+import { Img } from 'astro-imagetools/components';
+const { as: NonText, block } = Astro.props;
+
+let imgObj;
+let type;
+if (NonText !== 'hr') {
+  imgObj = block[block.type];
+  type = block[block.type].type;
+}
+---
+
+<NonText>
+  {
+    NonText === 'figure' &&
+    <Img
+      src={imgObj[type]?.url}
+      alt={`${imgObj.caption[0].plain_text || 'An image from notion'}`}
+      loading="lazy"
+    />
+    <Text as={'figcaption'} {block} />
+  }
+</NonText>
