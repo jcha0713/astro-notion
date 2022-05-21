@@ -70,6 +70,9 @@ export function getCorrectTagName(block, type: string): string {
     image: function () {
       return 'figure';
     },
+    divider: function () {
+      return 'hr';
+    },
   };
   return correctTagName[type]();
 }
