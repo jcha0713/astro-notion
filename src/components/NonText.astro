@@ -1,7 +1,28 @@
 ---
 import Text from './Text.astro';
 import { Img } from 'astro-imagetools/components';
+import { downloadFile } from '../lib/utils.ts'
 const { as: NonText, block } = Astro.props;
+
+console.log('block from non-text: ', block)
+console.log(block.image.file.url)
+
+const getCleanUrl = (url: string) => {
+  const cleanUrl = url.split('?')
+  return cleanUrl[0]
+}
+
+const getImageName = (url: string) => {
+  const splitUrl = url.split('/').filter(item => item.length > 0)
+  return splitUrl[3] + '-' + splitUrl[4].split('?')[0]
+}
+
+// const cleanUrl = getCleanUrl(block.image.file.url)
+const imageName = getImageName(block.image.file?.url)
+const filePath = process.cwd() + '/public/assets/notion/images/' + imageName
+
+console.log('filePath', filePath)
+await downloadFile(block.image.file.url, filePath)
 
 let imgObj;
 let type;
@@ -9,13 +30,14 @@ if (NonText !== 'hr') {
   imgObj = block[block.type];
   type = block[block.type].type;
 }
+
 ---
 
 <NonText>
   {
     NonText === 'figure' &&
     <Img
-      src={imgObj[type]?.url}
+      src={filePath}
       alt={`${imgObj.caption[0].plain_text || 'An image from notion'}`}
       loading="lazy"
     />
