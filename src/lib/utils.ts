@@ -6,7 +6,7 @@ export function getClassAttribute(block, objType) {
 
   function getClassArray(textObj) {
     let attrs = [];
-    const annotations = textObj.annotations;
+    const annotations = textObj?.annotations;
     if (!annotations) {
       return;
     }
@@ -40,10 +40,6 @@ export function getClassAttribute(block, objType) {
 export function getCorrectTagName(block, type: string): string {
   const correctTagName = {
     paragraph: function (block) {
-      // const isCode = block[block.type]?.rich_text[0].annotations.code;
-      // if (isCode) {
-      //   return 'code';
-      // }
       return 'p';
     },
     heading_1: function () {
@@ -73,15 +69,28 @@ export function getCorrectTagName(block, type: string): string {
     image: function () {
       return 'figure';
     },
+    video: function () {
+      return 'figure';
+    },
     divider: function () {
       return 'hr';
+    },
+    to_do: function () {
+      return 'li';
+    },
+    toggle: function () {
+      return 'summary';
     },
   };
   return correctTagName[type]();
 }
 
-export async function downloadFile(url, targetFile) {
-  if (!fs.existsSync(targetFile)) {
+export async function downloadFile(url, targetDir, targetFile) {
+  const targetPath = targetDir + targetFile;
+  if (!fs.existsSync(targetPath)) {
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
     return await new Promise((resolve, reject) => {
       https
         .get(url, (response) => {
@@ -93,12 +102,16 @@ export async function downloadFile(url, targetFile) {
 
           // handle redirects
           if (code > 300 && code < 400 && !!response.headers.location) {
-            return downloadFile(response.headers.location, targetFile);
+            return downloadFile(
+              response.headers.location,
+              targetDir,
+              targetFile
+            );
           }
 
           // save the file to disk
           const fileWriter = fs
-            .createWriteStream(targetFile)
+            .createWriteStream(targetPath)
             .on('finish', () => {
               resolve({});
             });

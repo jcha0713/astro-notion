@@ -1,16 +1,13 @@
 import { getBlockChildren } from './getBlockChildren';
 
-const listTypes = new Set(['bulleted_list_item', 'numbered_list_item']);
+const listTypes = new Set([
+  'bulleted_list_item',
+  'numbered_list_item',
+  'to_do',
+]);
 
 export async function getBlockTree(id: string) {
   const blocks = await addChildrenBlocks(id);
-  // blocks.map((block) => {
-  //   console.log('type: ', block[block.type]);
-  //   console.log('children: ', block[block.type].children);
-  // });
-
-  // console.log(blocks);
-
   return blocks;
 }
 
@@ -22,6 +19,8 @@ async function addChildrenBlocks(id: string) {
   blocks = await Promise.all(
     blocks.map(async (block, i, blocks) => {
       const { id, type } = block;
+
+      // console.log('block from getblocktree: ', block);
 
       // This part is for checking if each block is either the first or last item of the list element(<ul> or <ol>)
       // Because Notion API only returns list item blocks without wrapping them with list element,

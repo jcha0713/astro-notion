@@ -3,8 +3,7 @@ import Text from './Text.astro';
 import NonText from './NonText.astro'
 import { getCorrectTagName } from '../lib/utils.ts'
 
-const textTypes = new Set(['h1', 'h2', 'h3', 'p', 'li', 'blockquote', 'pre', 'div']);
-
+const textTypes = new Set(['h1', 'h2', 'h3', 'p', 'li', 'blockquote', 'pre', 'div', 'summary']);
 
 const { blocks } = Astro.props
 
@@ -23,9 +22,14 @@ function isEmpty(obj) {
     return (
       // if block has children, recursively call this component again as a slot of <Text> component
       block?.has_children ?
-      <Text as={tagName} {block}>
-        <Astro.self blocks={block[block.type].children} />
-      </Text> :
+        tagName === 'summary' ?
+        <details>
+          <Text as={tagName} {block} />
+          <Astro.self blocks={block[block.type].children} />
+        </details> :
+        <Text as={tagName} {block}>
+          <Astro.self blocks={block[block.type].children} />
+        </Text> :
       !textTypes.has(tagName) ?
       <NonText as={tagName} {block} /> :
       <Text as={tagName} {block} />

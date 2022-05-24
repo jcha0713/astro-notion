@@ -1,7 +1,10 @@
 ---
 import List from './List.astro';
+import { Code } from 'astro/components';
 import { getClassAttribute } from '../lib/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
+
+console.log('from text: ', block)
 
 let objType: string;
 Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
@@ -23,22 +26,38 @@ const getLink = (blockObj) => {
 }
 
 const getText = (blockObj) => {
-  return (
-    `<span ${getStyles(blockObj)}>${blockObj.plain_text}</span>`
-  )
-}
+  const tag = blockObj.annotations.code ? 'code' : 'span'
+  let text = `<${tag} ${getStyles(blockObj)}>${blockObj.plain_text}</${tag}>`;
 
+  if (block.type === 'callout') {
+    console.log(block)
+    text = `
+      <span>${block[block.type].icon.emoji}</span>
+      <${tag} ${getStyles(blockObj)}>${blockObj.plain_text}</${tag}>
+    `
+  }
+
+  if (block.type === 'to_do') {
+    text = `
+      <input type="checkbox" id="todo" name="todo" ${block[block.type].checked ? 'checked' : ''} />
+      <label ${getStyles(blockObj)} for="todo">${blockObj.plain_text}</label>
+    `
+  }
+  return text
+}
 ---
 
 <List {block} is_first={true} />
-<Text>
-  {
-    blockObjs.map((blockObj) => (
-      <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
-    ))
-  }
-  <slot />
-</Text>
+    <Text class:list={'notion-' + block.type}>
+      {
+        blockObjs.map((blockObj) => (
+          block.type === 'code' ?
+          <Code code={blockObj.plain_text} lang={block[block.type].language} theme="dark-plus"/> :
+          <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
+        ))
+      }
+      <slot />
+    </Text>
 <List {block} is_last={true} />
 
 
@@ -59,4 +78,12 @@ const getText = (blockObj) => {
   .notion-strikethrough {
     text-decoration: line-through;
   }
+
+  .notion-callout {
+    background-color: gainsboro;
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+  }
 </style>
+
