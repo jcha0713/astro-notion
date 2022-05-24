@@ -5,42 +5,58 @@ import { downloadFile } from '../lib/utils.ts'
 const { as: NonText, block } = Astro.props;
 
 console.log('block from non-text: ', block)
-console.log(block.image.file.url)
+const contentType = block.type
+const fileType = block[contentType].type
+let filePath: string;
 
-const getCleanUrl = (url: string) => {
-  const cleanUrl = url.split('?')
-  return cleanUrl[0]
+if (fileType === 'file') {
+  const getFileName = (url: string) => {
+    const splitUrl = url.split('/').filter(item => item.length > 0)
+    return splitUrl[3] + '-' + splitUrl[4].split('?')[0]
+  }
+
+  const imageName = getFileName(block[contentType].file?.url)
+  const notionContentPath = '/assets/notion/contents/'
+  const targetDir = process.cwd() + '/public' + notionContentPath
+  filePath = notionContentPath + imageName
+
+  await downloadFile(block[contentType][fileType].url, targetDir, imageName)
 }
 
-const getImageName = (url: string) => {
-  const splitUrl = url.split('/').filter(item => item.length > 0)
-  return splitUrl[3] + '-' + splitUrl[4].split('?')[0]
+if (fileType === 'external') {
+  const getCleanUrl = (url: string) => {
+    const cleanUrl = url.split('?')
+    if (contentType === 'video') {
+      const youtubeUrl = cleanUrl[0].replace(/\.be\//, 'be.com/embed/')
+      return youtubeUrl
+    }
+    return cleanUrl[0]
+  }
+  filePath = getCleanUrl(block[contentType][fileType].url)
 }
 
-// const cleanUrl = getCleanUrl(block.image.file.url)
-const imageName = getImageName(block.image.file?.url)
-const filePath = process.cwd() + '/public/assets/notion/images/' + imageName
-
-console.log('filePath', filePath)
-await downloadFile(block.image.file.url, filePath)
-
-let imgObj;
-let type;
+let fileObj;
 if (NonText !== 'hr') {
-  imgObj = block[block.type];
-  type = block[block.type].type;
+  fileObj = block[block.type];
 }
-
 ---
 
 <NonText>
   {
-    NonText === 'figure' &&
-    <Img
-      src={filePath}
-      alt={`${imgObj.caption[0].plain_text || 'An image from notion'}`}
-      loading="lazy"
-    />
-    <Text as={'figcaption'} {block} />
+    fileObj &&
+    <Fragment>
+      {
+        contentType === 'image' ?
+        <Img
+        src={filePath}
+        alt={`${fileObj.caption[0]?.plain_text || 'An image from notion'}`}
+        loading="lazy"
+        /> :
+        fileType === 'external' ?
+        <iframe src={filePath} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> :
+        <video controls><source src={filePath} type={`video/${filePath.split('.').at(-1)}`}></video>
+      }
+      {fileObj.caption.length > 0 && <Text as={'figcaption'} {block} />}
+    </Fragment>
   }
 </NonText>
