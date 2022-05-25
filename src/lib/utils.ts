@@ -8,7 +8,7 @@ export function getClassAttribute(block, objType) {
     let attrs = [];
     const annotations = textObj?.annotations;
     if (!annotations) {
-      return;
+      return attrs;
     }
     for (const style in annotations) {
       if (annotations[style]) {
@@ -18,15 +18,17 @@ export function getClassAttribute(block, objType) {
     return attrs;
   }
 
-  if (textObjs.length > 1) {
-    textObjs = textObjs.map((textObj) => {
-      return {
-        ...textObj,
-        classList: getClassArray(textObj),
-      };
-    });
-  } else {
-    textObjs[0]['classList'] = getClassArray(textObjs[0]);
+  if (textObjs.length > 0) {
+    if (textObjs.length > 1) {
+      textObjs = textObjs.map((textObj) => {
+        return {
+          ...textObj,
+          classList: getClassArray(textObj),
+        };
+      });
+    } else {
+      textObjs[0]['classList'] = getClassArray(textObjs[0]);
+    }
   }
 
   return textObjs;
