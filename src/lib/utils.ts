@@ -41,50 +41,22 @@ export function getClassAttribute(block, objType) {
 // Later the correctTagName will be used as a prop for polymorphic components
 export function getCorrectTagName(block, type: string): string {
   const correctTagName = {
-    paragraph: function (block) {
-      return 'p';
-    },
-    heading_1: function () {
-      return 'h1';
-    },
-    heading_2: function () {
-      return 'h2';
-    },
-    heading_3: function () {
-      return 'h3';
-    },
-    bulleted_list_item: function () {
-      return 'li';
-    },
-    numbered_list_item: function () {
-      return 'li';
-    },
-    quote: function () {
-      return 'blockquote';
-    },
-    code: function () {
-      return 'pre';
-    },
-    callout: function () {
-      return 'div';
-    },
-    image: function () {
-      return 'figure';
-    },
-    video: function () {
-      return 'figure';
-    },
-    divider: function () {
-      return 'hr';
-    },
-    to_do: function () {
-      return 'li';
-    },
-    toggle: function () {
-      return 'summary';
-    },
+    paragraph: 'p',
+    heading_1: 'h1',
+    heading_2: 'h2',
+    heading_3: 'h3',
+    bulleted_list_item: 'li',
+    numbered_list_item: 'li',
+    quote: 'blockquote',
+    code: 'pre',
+    callout: 'p',
+    image: 'figure',
+    video: 'figure',
+    divider: 'hr',
+    to_do: 'li',
+    toggle: 'summary',
   };
-  return correctTagName[type]();
+  return correctTagName[type];
 }
 
 export async function downloadFile(url, targetDir, targetFile) {
@@ -127,3 +99,4 @@ export async function downloadFile(url, targetDir, targetFile) {
   }
   return null;
 }
+
