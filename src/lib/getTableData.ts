@@ -13,6 +13,7 @@ export async function getTableHeader(): Promise<GetDatabaseResponse> {
     const response = await notion.databases.retrieve({
       database_id: databaseId,
     });
+
     return response;
   } catch (error) {
     console.error(error);

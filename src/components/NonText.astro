@@ -4,7 +4,6 @@ import { Img } from 'astro-imagetools/components';
 import { downloadFile } from '../lib/utils.ts'
 const { as: NonText, block } = Astro.props;
 
-console.log('block from non-text: ', block)
 const contentType = block.type
 const fileType = block[contentType].type
 let filePath: string;

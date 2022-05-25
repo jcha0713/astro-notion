@@ -20,8 +20,6 @@ async function addChildrenBlocks(id: string) {
     blocks.map(async (block, i, blocks) => {
       const { id, type } = block;
 
-      // console.log('block from getblocktree: ', block);
-
       // This part is for checking if each block is either the first or last item of the list element(<ul> or <ol>)
       // Because Notion API only returns list item blocks without wrapping them with list element,
       // it is necessary to manually add <ul> or <ol> before the first item and corresponding closing tag after the last item of the list
