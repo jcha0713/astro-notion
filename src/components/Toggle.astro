@@ -1,0 +1,12 @@
+<details>
+  <summary>
+    <slot name="summary" />
+  </summary>
+  <slot name="content" />
+</details>
+
+<style is:global>
+  details summary > * {
+    display: inline;
+  }
+</style>

@@ -4,17 +4,16 @@ import { Code } from 'astro/components';
 import { getClassAttribute } from '../lib/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
 
-console.log('from text: ', block)
-
 let objType: string;
 Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
 let blockObjs = block[block.type][objType]
+
 blockObjs = getClassAttribute(block, objType)
 
 const getStyles = (blockObj) => {
   let styles = '';
-  if (blockObj.classList?.length > 0) {
-    styles = blockObj.classList.join(' ')
+  if (blockObj?.classList?.length > 0) {
+    styles = blockObj?.classList.join(' ')
   }
   return styles && `class='${styles}'`
 }
@@ -29,14 +28,7 @@ const getText = (blockObj) => {
   const tag = blockObj.annotations.code ? 'code' : 'span'
   let text = `<${tag} ${getStyles(blockObj)}>${blockObj.plain_text}</${tag}>`;
 
-  if (block.type === 'callout') {
-    console.log(block)
-    text = `
-      <span>${block[block.type].icon.emoji}</span>
-      <${tag} ${getStyles(blockObj)}>${blockObj.plain_text}</${tag}>
-    `
-  }
-
+  // TODO: move this block to List component
   if (block.type === 'to_do') {
     text = `
       <input type="checkbox" id="todo" name="todo" ${block[block.type].checked ? 'checked' : ''} />
@@ -50,11 +42,13 @@ const getText = (blockObj) => {
 <List {block} is_first={true} />
     <Text class:list={'notion-' + block.type}>
       {
-        blockObjs.map((blockObj) => (
-          block.type === 'code' ?
-          <Code code={blockObj.plain_text} lang={block[block.type].language} theme="dark-plus"/> :
-          <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
-        ))
+        blockObjs.map((blockObj) => {
+          return (
+            block.type === 'code' && block[block.type].language !== 'plain text' ?
+              <Code code={blockObj.plain_text} lang={block[block.type].language} theme="dark-plus"/> :
+              <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
+          )
+        })
       }
       <slot />
     </Text>
@@ -66,7 +60,7 @@ const getText = (blockObj) => {
     font-weight: bold;
   }
 
-  .notion-italics {
+  .notion-italic {
     font-style: italic;
   }
 
@@ -77,13 +71,6 @@ const getText = (blockObj) => {
 
   .notion-strikethrough {
     text-decoration: line-through;
-  }
-
-  .notion-callout {
-    background-color: gainsboro;
-    padding: 0.5rem;
-    display: flex;
-    gap: 0.5rem;
   }
 </style>
 

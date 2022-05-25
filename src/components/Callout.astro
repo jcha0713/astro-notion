@@ -1,0 +1,18 @@
+---
+const { block } = Astro.props;
+---
+
+<div class="notion-callout-wrapper">
+  <span>{block[block.type].icon.emoji}</span>
+  <slot />
+</div>
+
+<style is:global>
+  .notion-callout-wrapper {
+    background-color: gainsboro;
+    padding: 0.5rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+</style>
