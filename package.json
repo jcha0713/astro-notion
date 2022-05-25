@@ -12,11 +12,10 @@
   "devDependencies": {
     "astro": "^1.0.0-beta.31",
     "prettier": "^2.6.2",
-    "prettier-plugin-astro": "^0.0.12",
-    "sass": "^1.51.0"
+    "prettier-plugin-astro": "^0.0.12"
   },
   "dependencies": {
     "@notionhq/client": "^1.0.4",
-    "astro-imagetools": "^0.6.7"
+    "astro-imagetools": "^0.6.9"
   }
 }
