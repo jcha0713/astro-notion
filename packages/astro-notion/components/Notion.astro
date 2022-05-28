@@ -3,7 +3,7 @@ import Text from './Text.astro';
 import NonText from './NonText.astro'
 import Toggle from './Toggle.astro'
 import Callout from './Callout.astro'
-import { getCorrectTagName } from '../lib/utils.ts'
+import { getCorrectTagName } from '../api/utils.ts'
 
 const textTypes = new Set(['h1', 'h2', 'h3', 'p', 'li', 'blockquote', 'pre', 'div', 'summary']);
 const toggleTypes = new Set(['h1', 'h2', 'h3', 'summary']);

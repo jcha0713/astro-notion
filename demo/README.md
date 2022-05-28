@@ -1,19 +1,12 @@
-# Astro Starter Kit: Blog
+# Astro Starter Kit: Minimal
 
 ```
-npm init astro -- --template blog
+npm init astro -- --template minimal
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-Features:
-
-- ✅ SEO-friendly setup with canonical URLs and OpenGraph data
-- ✅ Full Markdown support
-- ✅ RSS 2.0 generation
-- ✅ Sitemap.xml generation
 
 ## 🚀 Project Structure
 
@@ -22,11 +15,7 @@ Inside of your Astro project, you'll see the following folders and files:
 ```
 /
 ├── public/
-│   ├── robots.txt
-│   └── favicon.ico
 ├── src/
-│   ├── components/
-│   │   └── Tour.astro
 │   └── pages/
 │       └── index.astro
 └── package.json
@@ -43,7 +32,7 @@ Any static assets, like images, can be placed in the `public/` directory.
 All commands are run from the root of the project, from a terminal:
 
 | Command           | Action                                       |
-| :---------------- | :------------------------------------------- |
+|:----------------  |:-------------------------------------------- |
 | `npm install`     | Installs dependencies                        |
 | `npm run dev`     | Starts local dev server at `localhost:3000`  |
 | `npm run build`   | Build your production site to `./dist/`      |

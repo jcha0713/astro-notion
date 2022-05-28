@@ -100,3 +100,4 @@ export async function downloadFile(url, targetDir, targetFile) {
   return null;
 }
 
+export function getEmoji(block) {}

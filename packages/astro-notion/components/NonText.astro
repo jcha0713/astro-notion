@@ -1,7 +1,7 @@
 ---
 import Text from './Text.astro';
 import { Img } from 'astro-imagetools/components';
-import { downloadFile } from '../lib/utils.ts'
+import { downloadFile } from '../api/utils.ts'
 const { as: NonText, block } = Astro.props;
 
 const contentType = block.type

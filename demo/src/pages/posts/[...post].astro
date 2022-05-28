@@ -1,0 +1,22 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+
+import { getTableData, generateStaticPaths } from 'astro-notion/api'
+import { Notion } from 'astro-notion/components'
+
+export async function getStaticPaths() {
+  const data = await getTableData();
+  return await generateStaticPaths(data)
+}
+
+const { post } = Astro.params;
+const { blocks } = Astro.props;
+
+console.log('post: ', post)
+
+---
+
+<PostLayout>
+  <Notion {blocks} />
+  <p>heyyyy</p>
+</PostLayout>

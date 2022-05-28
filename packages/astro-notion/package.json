@@ -1,0 +1,33 @@
+{
+  "name": "astro-notion",
+  "version": "0.1.0",
+  "exports": {
+    "./api": "./api/index.js",
+    "./components": "./components/index.js"
+  },
+  "keywords": [
+    "notion",
+    "astro",
+    "astro-component"
+  ],
+  "author": "Joohoon Cha <joocha0713@gmail.com> (https://jhcha.app)",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier -w ."
+  },
+  "devDependencies": {
+    "astro": "^1.0.0-beta.35",
+    "prettier": "^2.6.2",
+    "prettier-plugin-astro": "^0.0.12"
+  },
+  "dependencies": {
+    "@notionhq/client": "^1.0.4",
+    "astro-imagetools": "^0.6.9"
+  },
+  "peerDependencies": {
+    "astro": "^1.0.0-beta.0"
+  }
+}

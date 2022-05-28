@@ -27,7 +27,7 @@ type tableProps = {
 // Takes props for filtering options
 // Returns contents in the database
 // by default, it does not include the draft posts
-export async function getTableContent(
+export async function getTableData(
   props: tableProps = { includeDraft: false }
 ): Promise<QueryDatabaseResponse> {
   try {
@@ -48,6 +48,7 @@ export async function getTableContent(
       }),
     };
     const response = await notion.databases.query(queryObj);
+    console.log(response)
     return response;
   } catch (error) {
     console.error(error);
