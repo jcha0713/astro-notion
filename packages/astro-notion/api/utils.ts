@@ -1,6 +1,12 @@
 import * as fs from 'fs';
 import * as https from 'https';
 
+const supportedBlockTypes = new Set(['paragraph', 'heading_1', 'heading_2', 'heading_3', 'callout', 'quote', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'toggle', 'code', 'image', 'video', 'divider'])
+
+export function isSupportedBlockType(type) {
+  return supportedBlockTypes.has(type)
+}
+
 export function getClassAttribute(block, objType) {
   let textObjs = block[block.type][objType];
 
