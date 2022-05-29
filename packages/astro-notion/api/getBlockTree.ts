@@ -1,4 +1,5 @@
 import { getBlockChildren } from './getBlockChildren';
+import { isSupportedBlockType } from './utils'
 
 const listTypes = new Set([
   'bulleted_list_item',
@@ -19,6 +20,13 @@ async function addChildrenBlocks(id: string) {
   blocks = await Promise.all(
     blocks.map(async (block, i, blocks) => {
       const { id, type } = block;
+
+      if (!isSupportedBlockType(type)) {
+        console.warn(
+          `${type} blocks are not supported in this version of astro-notion and will not be rendered.`
+        )
+        return '';
+      }
 
       // This part is for checking if each block is either the first or last item of the list element(<ul> or <ol>)
       // Because Notion API only returns list item blocks without wrapping them with list element,
