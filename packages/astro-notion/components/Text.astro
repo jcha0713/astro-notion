@@ -4,43 +4,46 @@ import { Code } from 'astro/components';
 import { getClassAttribute } from '../api/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
 
+console.log(block)
+
 let objType: string;
 Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
 let blockObjs = block[block.type][objType]
 
 blockObjs = getClassAttribute(block, objType)
 
-const getStyles = (blockObj) => {
-  let styles = '';
+const getClasses = (blockObj, type = '') => {
+  let classes = type ? [`notion-${type}`] : []
   if (blockObj?.classList?.length > 0) {
-    styles = blockObj?.classList.join(' ')
+    classes =  [...classes, ...blockObj?.classList]
   }
-  return styles && `class='${styles}'`
+  return classes && `class='${classes.join(' ')}'`
 }
 
 const getLink = (blockObj) => {
   return (
-    `<a href=${blockObj.href} ${getStyles(blockObj)} >${blockObj.plain_text}</a>`
+    `<a href=${blockObj.href} ${getClasses(blockObj, 'link')} >${blockObj.plain_text}</a>`
   )
 }
 
 const getText = (blockObj) => {
   const tag = blockObj.annotations.code ? 'code' : 'span'
-  let text = `<${tag} ${getStyles(blockObj)}>${blockObj.plain_text}</${tag}>`;
+  let text = `<${tag} ${getClasses(blockObj)}>${blockObj.plain_text}</${tag}>`;
 
   // TODO: move this block to List component
   if (block.type === 'to_do') {
     text = `
       <input type="checkbox" id="todo" name="todo" ${block[block.type].checked ? 'checked' : ''} />
-      <label ${getStyles(blockObj)} for="todo">${blockObj.plain_text}</label>
+      <label ${getClasses(blockObj)} for="todo">${blockObj.plain_text}</label>
     `
   }
   return text
 }
+
 ---
 
 <List {block} is_first={true} />
-    <Text class:list={'notion-' + block.type}>
+    <Text class:list={'notion-' + Text}>
       {
         blockObjs.map((blockObj) => {
           return (

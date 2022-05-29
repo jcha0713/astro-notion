@@ -15,15 +15,26 @@ const { blocks } = Astro.props
 {
   blocks.map(block => {
     let tagName = getCorrectTagName(block, block.type);
+    if (!tagName) {
+      return;
+    }
     return (
       // if block has children, recursively call this component again as a slot of <Text> component
       block?.has_children
       ?
         !toggleTypes.has(tagName) 
         ?
-          <Text as={tagName} {block}>
-            <Astro.self blocks={block[block.type].children} />
-          </Text>
+          block.type === 'callout'
+          ?
+            <Callout {block}>
+              <Text as={tagName} {block}>
+                <Astro.self blocks={block[block.type].children} />
+              </Text>
+            </Callout> 
+          :
+            <Text as={tagName} {block}>
+              <Astro.self blocks={block[block.type].children} />
+            </Text>
           :
           <Toggle>
             <Text slot='summary' as={tagName} {block} />

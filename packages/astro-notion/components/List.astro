@@ -7,6 +7,6 @@ const listType = block.type === 'numbered_list_item' ? 'ol' : 'ul'
 
 {
   is_first ?
-  block[block.type].is_first && <Fragment set:html={`<${listType}>`} /> :
+  block[block.type].is_first && <Fragment set:html={`<${listType} class=notion-${listType}>`} /> :
   block[block.type].is_last && <Fragment set:html={`</${listType}>`} />
 }

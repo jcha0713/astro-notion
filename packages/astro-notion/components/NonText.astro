@@ -40,7 +40,7 @@ if (NonText !== 'hr') {
 }
 ---
 
-<NonText>
+<NonText class:list={`notion-${block.type}${NonText !== 'hr' ? '-wrapper' : ''}`}>
   {
     fileObj &&
     <Fragment>
@@ -50,10 +50,15 @@ if (NonText !== 'hr') {
         src={filePath}
         alt={`${fileObj.caption[0]?.plain_text || 'An image from notion'}`}
         loading="lazy"
+        attributes={{
+          img: {
+            class: 'notion-image'
+          },
+        }}
         /> :
         fileType === 'external' ?
-        <iframe src={filePath} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> :
-        <video controls><source src={filePath} type={`video/${filePath.split('.').at(-1)}`}></video>
+        <iframe class='notion-iframe' src={filePath} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> :
+        <video class="notion-video" controls><source src={filePath} type={`video/${filePath.split('.').at(-1)}`}></video>
       }
       {fileObj.caption.length > 0 && <Text as={'figcaption'} {block} />}
     </Fragment>

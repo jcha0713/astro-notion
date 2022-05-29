@@ -3,16 +3,8 @@ const { block } = Astro.props;
 ---
 
 <div class="notion-callout-wrapper">
-  <span>{block[block.type].icon.emoji}</span>
-  <slot />
+  <span class="notion-callout-icon">{block[block.type].icon.emoji}</span>
+  <div class="notion-callout-content">
+    <slot />
+  </div>
 </div>
-
-<style is:global>
-  .notion-callout-wrapper {
-    background-color: gainsboro;
-    padding: 0.5rem 1rem;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-</style>
