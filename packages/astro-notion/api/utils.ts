@@ -1,13 +1,21 @@
 import * as fs from 'fs';
 import * as https from 'https';
 
-const supportedBlockTypes = new Set(['paragraph', 'heading_1', 'heading_2', 'heading_3', 'callout', 'quote', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'toggle', 'code', 'image', 'video', 'divider'])
+const supportedBlockTypes = new Set(['paragraph', 'heading_1', 'heading_2', 'heading_3', 'callout', 'quote', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'toggle', 'code', 'image', 'video', 'divider', 'bookmark'])
 
 export function isSupportedBlockType(type) {
   return supportedBlockTypes.has(type)
 }
 
-export function getClassAttribute(block, objType) {
+export function getClassAttributes(blockObj, type = '') {
+  let classes = type ? [`notion-${type}`] : []
+  if (blockObj?.classList?.length > 0) {
+    classes =  [...classes, ...blockObj?.classList]
+  }
+  return classes.length > 0 ? `class='${classes.join(' ')}'` : ''
+}
+
+export function setClassAttributes(block, objType) {
   let textObjs = block[block.type][objType];
 
   function getClassArray(textObj) {
@@ -55,12 +63,13 @@ export function getCorrectTagName(block, type: string): string {
     numbered_list_item: 'li',
     quote: 'blockquote',
     code: 'pre',
-    callout: 'p',
     image: 'figure',
     video: 'figure',
     divider: 'hr',
     to_do: 'li',
-    toggle: 'summary',
+    callout: 'p',
+    toggle: 'p',
+    bookmark: 'p',
   };
   return correctTagName[type];
 }

@@ -2,9 +2,13 @@
 const { block } = Astro.props;
 ---
 
-<div class="notion-callout-wrapper">
-  <span class="notion-callout-icon">{block[block.type].icon.emoji}</span>
-  <div class="notion-callout-content">
-    <slot />
-  </div>
-</div>
+{
+  block.type === 'callout' ?
+  (<div class="notion-callout-wrapper">
+    <span class="notion-callout-icon">{block[block.type].icon.emoji}</span>
+    <div class="notion-callout-content">
+      <slot />
+    </div>
+  </div>) :
+  <slot />
+}

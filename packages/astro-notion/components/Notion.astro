@@ -6,7 +6,6 @@ import Callout from './Callout.astro'
 import { getCorrectTagName } from '../api/utils.ts'
 
 const textTypes = new Set(['h1', 'h2', 'h3', 'p', 'li', 'blockquote', 'pre', 'div', 'summary']);
-const toggleTypes = new Set(['h1', 'h2', 'h3', 'summary']);
 
 const { blocks } = Astro.props
 
@@ -22,36 +21,26 @@ const { blocks } = Astro.props
       // if block has children, recursively call this component again as a slot of <Text> component
       block?.has_children
       ?
-        !toggleTypes.has(tagName) 
+        block.type === 'callout'
         ?
-          block.type === 'callout'
-          ?
-            <Callout {block}>
-              <Text as={tagName} {block}>
-                <Astro.self blocks={block[block.type].children} />
-              </Text>
-            </Callout> 
-          :
+          <Callout {block}>
             <Text as={tagName} {block}>
               <Astro.self blocks={block[block.type].children} />
             </Text>
-          :
-          <Toggle>
-            <Text slot='summary' as={tagName} {block} />
-            <Astro.self slot='content' blocks={block[block.type].children} />
-          </Toggle> 
+          </Callout> 
+        :
+        <Toggle>
+          <Text slot='summary' as={tagName} {block} />
+          <Astro.self slot='content' blocks={block[block.type].children} />
+        </Toggle> 
       :
         !textTypes.has(tagName) 
         ?
           <NonText as={tagName} {block} /> 
           :
-          block.type === 'callout' 
-          ?
-            <Callout {block}>
-              <Text as={tagName} {block} />
-            </Callout> 
-            :
+          <Callout {block}>
             <Text as={tagName} {block} />
+          </Callout> 
     )
   })
 }
