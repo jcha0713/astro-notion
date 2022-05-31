@@ -1,0 +1,43 @@
+---
+import Notion from './Notion.astro';
+import Text from './Text.astro';
+import Callout from './Callout.astro'
+import Toggle from './Toggle.astro'
+import Bookmark from './Bookmark.astro'
+import { getCorrectTagName } from '../api/utils.ts'
+
+const toggleTypes = new Set(['h1', 'h2', 'h3']);
+const listTypes = new Set([
+  'bulleted_list_item',
+  'numbered_list_item',
+  'to_do',
+]);
+
+const {block} = Astro.props
+const blockType = block.type
+const tagName = getCorrectTagName(block, blockType);
+
+---
+
+<Fragment>
+  {blockType === 'callout' && (
+    <Callout {block}>
+      <Text as={tagName} {block}>
+        <Notion blocks={block[blockType].children} />
+      </Text>
+    </Callout>
+  )}
+
+  {listTypes.has(blockType) && (
+    <Text as={tagName} {block}>
+      <Notion blocks={block[blockType].children} />
+    </Text>
+  )}
+
+  {(blockType === 'toggle' || toggleTypes.has(tagName)) && (
+    <Toggle>
+      <Text slot='summary' as={tagName} {block} />
+      <Notion slot='content' blocks={block[blockType].children} />
+    </Toggle>
+  )}
+</Fragment>

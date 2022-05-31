@@ -20,14 +20,16 @@ const getLink = (blockObj) => {
 const getText = (blockObj) => {
   let text = blockObj.plain_text
 
-  if (getClassAttributes(blockObj)) {
-    text = `<span ${getClassAttributes(blockObj)}>${blockObj.plain_text}</span>`;
+  const classAttributes = getClassAttributes(blockObj)
+
+  if (classAttributes) {
+    text = `<span ${classAttributes}>${blockObj.plain_text}</span>`;
   }
 
   if (block.type === 'to_do') {
     text = `
       <input type="checkbox" id="todo" name="todo" ${block[block.type].checked ? 'checked' : ''} />
-      <label ${getClassAttributes(blockObj)} for="todo">${blockObj.plain_text}</label>
+      <label ${classAttributes} for="todo">${blockObj.plain_text}</label>
     `
   }
 
@@ -54,7 +56,6 @@ const getText = (blockObj) => {
   <slot />
 </Text>
 <List {block} is_last={true} />
-
 
 <style is:global>
   .notion-bold {
