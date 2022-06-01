@@ -48,7 +48,6 @@ export async function getTableData(
       }),
     };
     const response = await notion.databases.query(queryObj);
-    console.log(response)
     return response;
   } catch (error) {
     console.error(error);

@@ -1,0 +1,20 @@
+.notion-bold {
+  font-weight: bold;
+}
+
+.notion-italic {
+  font-style: italic;
+}
+
+.notion-underline {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.notion-strikethrough {
+  text-decoration: line-through;
+}
+
+.notion-toggle-wrapper .notion-toggle-header > * {
+  display: inline;
+}

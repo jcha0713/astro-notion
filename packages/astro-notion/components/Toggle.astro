@@ -1,14 +1,19 @@
+---
+import Notion from './Notion.astro';
+import Text from './Text.astro';
+import { getCorrectTagName } from '../api/utils.ts'
+
+const { block } = Astro.props
+const blockType = block.type
+const tagName = getCorrectTagName(block, blockType);
+---
 <details class="notion-toggle-wrapper">
   <summary class="notion-toggle-header">
-    <slot name="summary" />
+    <Text as={tagName} {block} />
   </summary>
-  <div class="notion-toggle-content">
-    <slot name="content" />
-  </div>
+  {block.has_children && (
+    <div class="notion-toggle-content">
+      <Notion blocks={block[blockType].children} />
+    </div>
+  )}
 </details>
-
-<style is:global>
-  details summary > * {
-    display: inline;
-  }
-</style>

@@ -1,7 +1,7 @@
 ---
 import List from './List.astro';
 import InlineCode from './InlineCode.astro';
-import { Code } from 'astro/components';
+import '../styles/global.css'
 import { getClassAttributes, setClassAttributes } from '../api/utils.ts'
 const { as: Text = 'p', block } = Astro.props;
 
@@ -43,36 +43,13 @@ const getText = (blockObj) => {
   {
     blockObjs.map((blockObj) => {
       return (
-        block.type === 'code' && block[block.type].language !== 'plain text' ?
-          <Code code={blockObj.plain_text} lang={block[block.type].language} theme="dark-plus"/> :
-          blockObj?.annotations.code
-          ?
-            <InlineCode text={blockObj.plain_text} />
-            :
-            <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
+        blockObj?.annotations.code
+        ? <InlineCode text={blockObj.plain_text} />
+        : <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
       )
     })
   }
   <slot />
 </Text>
 <List {block} is_last={true} />
-
-<style is:global>
-  .notion-bold {
-    font-weight: bold;
-  }
-
-  .notion-italic {
-    font-style: italic;
-  }
-
-  .notion-underline {
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .notion-strikethrough {
-    text-decoration: line-through;
-  }
-</style>
 

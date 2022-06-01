@@ -1,14 +1,19 @@
 ---
+import Notion from './Notion.astro';
+import Text from './Text.astro';
+import { getCorrectTagName } from '../api/utils.ts'
 const { block } = Astro.props;
+const blockType = block.type
+const tagName = getCorrectTagName(block, blockType);
 ---
 
-{
-  block.type === 'callout' ?
-  (<div class="notion-callout-wrapper">
-    <span class="notion-callout-icon">{block[block.type].icon.emoji}</span>
-    <div class="notion-callout-content">
-      <slot />
-    </div>
-  </div>) :
-  <slot />
-}
+<div class="notion-callout-wrapper">
+  <span class="notion-callout-icon">{block[block.type].icon.emoji}</span>
+  <div class="notion-callout-content">
+    <Text as={tagName} {block}>
+      {block.has_children && (
+        <Notion blocks={block[blockType].children} />
+      )}
+    </Text>
+  </div>
+</div>

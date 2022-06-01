@@ -13,7 +13,7 @@ const listTypes = new Set([
   'to_do',
 ]);
 
-const {block} = Astro.props
+const { block } = Astro.props
 const blockType = block.type
 const tagName = getCorrectTagName(block, blockType);
 
@@ -21,23 +21,18 @@ const tagName = getCorrectTagName(block, blockType);
 
 <Fragment>
   {blockType === 'callout' && (
-    <Callout {block}>
-      <Text as={tagName} {block}>
-        <Notion blocks={block[blockType].children} />
-      </Text>
-    </Callout>
+    <Callout {block} />
+  )}
+
+  {(blockType === 'toggle' || toggleTypes.has(tagName)) && (
+    <Toggle {block} />
   )}
 
   {listTypes.has(blockType) && (
     <Text as={tagName} {block}>
-      <Notion blocks={block[blockType].children} />
+      {block.has_children && (
+        <Notion blocks={block[blockType].children} />
+      )}
     </Text>
-  )}
-
-  {(blockType === 'toggle' || toggleTypes.has(tagName)) && (
-    <Toggle>
-      <Text slot='summary' as={tagName} {block} />
-      <Notion slot='content' blocks={block[blockType].children} />
-    </Toggle>
   )}
 </Fragment>
