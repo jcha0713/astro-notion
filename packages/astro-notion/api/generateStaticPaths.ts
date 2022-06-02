@@ -1,16 +1,16 @@
-import { getBlockTree } from './getBlockTree'
+import { getBlockTree } from './getBlockTree';
 
 export async function generateStaticPaths(data) {
   const { results } = data;
   return await Promise.all(
-    results.map(async (post) => {
-      const blocks = await getBlockTree(post.id);
-      const postTitle = post.properties.slug.rich_text[0].plain_text;
+    results.map(async (pageData) => {
+      const blocks = await getBlockTree(pageData.id);
+      const pageTitle = pageData.url.split('/').at(-1);
       return {
         params: {
-          post: post.id + '-' + postTitle,
+          post: pageTitle,
         },
-        props: { blocks },
+        props: { pages: results, pageData, blocks },
       };
     })
   );

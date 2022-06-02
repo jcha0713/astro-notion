@@ -1,7 +1,11 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+
+const { pages, pageData, postUrl } = Astro.props
+
 ---
 
 <BaseLayout>
+  <h1>title: {pageData.properties.title.title[0].plain_text}</h1>
   <slot />
 </BaseLayout>

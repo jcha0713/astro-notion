@@ -14,6 +14,7 @@ export async function getTableHeader(): Promise<GetDatabaseResponse> {
       database_id: databaseId,
     });
 
+    console.log(response);
     return response;
   } catch (error) {
     console.error(error);
@@ -48,6 +49,7 @@ export async function getTableData(
       }),
     };
     const response = await notion.databases.query(queryObj);
+    console.log(response.results.properties);
     return response;
   } catch (error) {
     console.error(error);

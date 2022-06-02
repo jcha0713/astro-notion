@@ -1,0 +1,9 @@
+---
+import { getTableData } from 'astro-notion/api'
+
+const data = await getTableData();
+const pages = data.results
+
+---
+
+{pages.map(page => <a href={'posts/' + page.url.split('/').at(-1)}>{page.properties.title.title[0].plain_text}</a>)}

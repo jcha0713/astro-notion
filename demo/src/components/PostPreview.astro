@@ -1,0 +1,11 @@
+---
+const { postUrl, post, blocks } = Astro.props
+
+console.log(post.properties.title.title[0].plain_text)
+---
+
+<p>{post.properties.title.title[0].plain_text}</p>
+<a href={postUrl}>go to post</a>
+
+
+

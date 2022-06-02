@@ -9,14 +9,11 @@ export async function getStaticPaths() {
   return await generateStaticPaths(data)
 }
 
-const { post } = Astro.params;
-const { blocks } = Astro.props;
-
-console.log('post: ', post)
+const { post: postUrl } = Astro.params;
+const { pages, pageData, blocks } = Astro.props;
 
 ---
 
-<PostLayout>
+<PostLayout {pages} {pageData} {postUrl}>
   <Notion {blocks} />
-  <p>heyyyy</p>
 </PostLayout>
