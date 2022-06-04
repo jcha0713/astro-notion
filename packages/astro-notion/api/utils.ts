@@ -1,18 +1,34 @@
 import * as fs from 'fs';
 import * as https from 'https';
 
-const supportedBlockTypes = new Set(['paragraph', 'heading_1', 'heading_2', 'heading_3', 'callout', 'quote', 'bulleted_list_item', 'numbered_list_item', 'to_do', 'toggle', 'code', 'image', 'video', 'divider', 'bookmark'])
+const supportedBlockTypes = new Set([
+  'paragraph',
+  'heading_1',
+  'heading_2',
+  'heading_3',
+  'callout',
+  'quote',
+  'bulleted_list_item',
+  'numbered_list_item',
+  'to_do',
+  'toggle',
+  'code',
+  'image',
+  'video',
+  'divider',
+  'bookmark',
+]);
 
 export function isSupportedBlockType(type) {
-  return supportedBlockTypes.has(type)
+  return supportedBlockTypes.has(type);
 }
 
 export function getClassAttributes(blockObj, type = '') {
-  let classes = type ? [`notion-${type}`] : []
+  let classes = type ? [`notion-${type}`] : [];
   if (blockObj?.classList?.length > 0) {
-    classes =  [...classes, ...blockObj?.classList]
+    classes = [...classes, ...blockObj?.classList];
   }
-  return classes.length > 0 ? `class='${classes.join(' ')}'` : ''
+  return classes.length > 0 ? `class='${classes.join(' ')}'` : '';
 }
 
 export function setClassAttributes(block, objType) {
@@ -116,3 +132,67 @@ export async function downloadFile(url, targetDir, targetFile) {
 }
 
 export function getEmoji(block) {}
+
+export function getPlainText(textObj) {
+  if (typeof textObj?.type !== 'string') {
+    return;
+  }
+
+  const type = textObj.type;
+  const plainText = textObj[type].map((text) => text.plain_text).join('');
+
+  return plainText;
+}
+
+export function getPostDate(created, edited, userDateObj) {
+  const isValidUserDate = (userDateObj) => {
+    if (
+      userDateObj === null ||
+      userDateObj?.type !== 'date' ||
+      userDateObj[userDateObj?.type] === null
+    ) {
+      return false;
+    }
+
+    const dateStr = userDateObj[userDateObj.type].start;
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (dateStr.match(regex) === null) {
+      return false;
+    }
+
+    const date = new Date(dateStr);
+    const timestamp = date.getTime();
+
+    if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
+      return false;
+    }
+
+    return date.toISOString().startsWith(dateStr);
+  };
+
+  const getUserDate = (userDateObj) => {
+    if (
+      userDateObj === null ||
+      userDateObj?.type !== 'date' ||
+      userDateObj[userDateObj?.type] === null
+    ) {
+      return false;
+    }
+
+    return userDateObj[userDateObj.type].start;
+  };
+
+  const formatDate = (dateStr) => {
+    return dateStr.slice(0, 10);
+  };
+
+  const postCreated = isValidUserDate(userDateObj)
+    ? getUserDate(userDateObj)
+    : created;
+
+  return {
+    created: formatDate(postCreated),
+    edited: formatDate(edited),
+  };
+}

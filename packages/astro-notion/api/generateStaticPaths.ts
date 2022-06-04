@@ -2,19 +2,22 @@ import { getBlockTree } from './getBlockTree';
 import { getTableData } from './getTableData';
 
 export async function generateStaticPaths() {
-  const { results } = await getTableData();
-
-  // console.log(results);
+  const data = await getTableData();
+  const sortedPosts = data.sort(
+    (a, b) =>
+      new Date(b.date.created).valueOf() -
+      new Date(a.date.created).valueOf()
+  )
 
   return await Promise.all(
-    results.map(async (pageData) => {
+    sortedPosts.map(async (pageData) => {
       const blocks = await getBlockTree(pageData.id);
-      const postUrl = pageData.url.split('/').at(-1);
+      const [ postUrl ] = new URL(pageData.url).pathname.split('/').filter(str => str.length > 0)
       return {
         params: {
           post: postUrl,
         },
-        props: { pages: results, pageData, blocks },
+        props: { pages: data, pageData, blocks },
       };
     })
   );

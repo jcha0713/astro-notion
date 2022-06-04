@@ -1,4 +1,5 @@
 import { getNotionClient, getDatabaseId } from './notionClient';
+import { getPlainText, getPostDate } from './utils';
 import {
   GetDatabaseResponse,
   QueryDatabaseResponse,
@@ -14,7 +15,6 @@ export async function getTableHeader(): Promise<GetDatabaseResponse> {
       database_id: databaseId,
     });
 
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);
@@ -30,7 +30,7 @@ type tableProps = {
 // by default, it does not include the draft posts
 export async function getTableData(
   props: tableProps = { includeDraft: false }
-): Promise<QueryDatabaseResponse> {
+) {
   try {
     const { includeDraft } = props;
     const databaseId = getDatabaseId();
@@ -48,10 +48,46 @@ export async function getTableData(
         },
       }),
     };
+
     const response = await notion.databases.query(queryObj);
-    console.log(response.results.properties);
-    return response;
+    const cleanedData = cleanTableData(response.results);
+    return cleanedData;
   } catch (error) {
     console.error(error);
   }
+}
+
+type pageMetaData = {
+  id: string;
+  url: string;
+  date: {
+    created: string;
+    edited: string;
+  };
+  properties: {
+    title: number;
+    slug: string;
+  };
+};
+
+function cleanTableData(data): pageMetaData[] | [] {
+  if (!data) {
+    return [];
+  }
+
+  const cleanedData = data.map((page): pageMetaData => {
+    const { id, created_time, last_edited_time, properties, url } = page;
+
+    return {
+      id,
+      url,
+      date: getPostDate(created_time, last_edited_time, properties?.date),
+      properties: {
+        title: getPlainText(properties?.title),
+        slug: getPlainText(properties?.slug),
+      },
+    };
+  });
+
+  return cleanedData;
 }
