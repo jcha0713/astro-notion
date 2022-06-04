@@ -3,6 +3,8 @@ import { astroImageTools } from "astro-imagetools";
 
 // https://astro.build/config
 export default defineConfig({
+  publicDir: './public',
+  outDir: './dist',
   vite: {
     plugins: [
       {
