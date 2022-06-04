@@ -1,0 +1,69 @@
+.notion-divider {
+  color: rgba(0, 0, 0, 0.2);
+  margin: var(--size-2) 0;
+}
+
+.notion-ul, .notion-ol {
+  list-style: inside;
+  margin: var(--size-3) 0;
+}
+
+.notion-callout-wrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: antiquewhite;
+  padding: var(--size-4);
+  border-radius: 4px;
+
+  .notion-callout-icon {
+    margin-right: var(--size-3);
+  }
+}
+
+.notion-toggle-wrapper {
+  margin: var(--size-4) 0;
+  background-color: whitesmoke;
+  padding: var(--size-2);
+  border-radius: 4px;
+}
+
+.notion-toggle-wrapper[open] summary {
+  margin-bottom: var(--size-4);
+}
+
+.notion-h1, .notion-h2, .notion-h3 {
+  margin: var(--size-6) 0 var(--size-3) 0;
+  font-weight: 600;
+}
+
+.notion-h1 {
+  font-size: var(--size-7);
+}
+
+.notion-h2 {
+  font-size: var(--size-6);
+}
+
+.notion-h3 {
+  font-size: var(--size-4);
+}
+
+.notion-p {
+  margin: var(--size-1) 0;
+}
+
+.notion-inline-code {
+  background-color: gainsboro;
+  padding: var(--size-1) var(--size-2);
+  border-radius: 4px;
+}
+
+.notion-image-wrapper {
+  max-width: fit-content;
+  margin: var(--size-4) 0;
+}
+
+.notion-pre {
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+}

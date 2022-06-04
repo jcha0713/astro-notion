@@ -1,9 +1,39 @@
 ---
 import { getTableData } from 'astro-notion/api'
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostPreview from '../../components/PostPreview.astro';
 
 const data = await getTableData();
-const pages = data.results
+const sortedPosts = data.sort(
+  (a, b) =>
+    new Date(b.date.created).valueOf() -
+    new Date(a.date.created).valueOf()
+)
 
 ---
 
-{pages.map(page => <a href={'posts/' + page.url.split('/').at(-1)}>{page.properties.title.title[0].plain_text}</a>)}
+<BaseLayout>
+  <div class="posts">
+    <h1>Posts</h1>
+    <div>
+      {
+        sortedPosts.map(post => 
+          <PostPreview postUrl = {post.url} post = {post} />
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<style lang='scss'>
+  .posts {
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+      font-size: var(--size-6);
+      margin: var(--size-2) 0;
+    }
+  }
+</style>
+

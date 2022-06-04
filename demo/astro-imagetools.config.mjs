@@ -1,5 +1,5 @@
-import { defineConfig } from 'astro-imagetools/config';
+import { defineConfig } from "astro-imagetools/config";
 
 export default defineConfig({
-  fallbackFormat: 'png',
+  fallbackFormat: "png",
 });

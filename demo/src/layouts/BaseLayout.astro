@@ -1,11 +1,47 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <BaseHead />
   <body>
-    <slot />
+    <Nav />
+    <div class="content">
+      <slot />
+    </div>
+    <Footer />
   </body>
 </html>
+
+<style lang='scss'>
+  body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: var(--size-fluid-2);
+    background-color: white;
+    width: 72vw;
+
+    .content {
+      flex: 1 0 0%;
+    }
+
+    :global(a) {
+      transition: color 0.2s linear;
+      &:hover {
+        color: #b8860b;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    body {
+      width: 100%;
+      padding: var(--size-fluid-4);
+    }
+  }
+</style>

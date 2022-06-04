@@ -1,11 +1,25 @@
 ---
 const { postUrl, post, blocks } = Astro.props
 
-console.log(post.properties.title.title[0].plain_text)
+const pathname = Astro.canonicalURL.pathname
+const [ endpoint ] = new URL(postUrl).pathname.split('/').filter(str => str.length > 0)
+
 ---
 
-<p>{post.properties.title.title[0].plain_text}</p>
-<a href={postUrl}>go to post</a>
+<a class='link' href={pathname + endpoint}>
+  <div class="preview-wrapper">
+    <p class='title'>{post.properties.title}</p>
+    <p class='date'>{post.date.created}</p>
+  </div>
+</a>
 
-
-
+<style lang='scss'>
+  .preview-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--size-6) 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+  }
+</style>
