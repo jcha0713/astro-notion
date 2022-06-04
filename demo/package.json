@@ -12,8 +12,9 @@
     "sass": "^1.52.2"
   },
   "dependencies": {
+    "@jcha0713/astro-notion": "^0.1.0",
+    "@notionhq/client": "^1.0.4",
     "astro-icon": "^0.7.1",
-    "astro-imagetools": "^0.6.9",
-    "astro-notion": "^0.1.0"
+    "astro-imagetools": "^0.6.9"
   }
 }

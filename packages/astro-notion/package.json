@@ -1,6 +1,8 @@
 {
-  "name": "astro-notion",
-  "version": "0.1.0",
+  "name": "@jcha0713/astro-notion",
+  "description": "Data fetching tool that connects Astro and Notion",
+  "version": "0.1.1",
+  "license": "MIT",
   "exports": {
     "./api": "./api/index.js",
     "./components": "./components/index.js"
