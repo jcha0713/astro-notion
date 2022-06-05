@@ -5,8 +5,36 @@ import { Icon } from 'astro-icon'
 
 <nav>
   <div class="title">
-    <a href="/">
-      <span>Astro-notion</span>
+    <a class='logo' href="/">
+      <svg
+        class='logo-svg'
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 367.6 367.6"
+        class="w-7 dark:fill-light-bg dark:brightness-90"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <ellipse class="ec" cx="183.8" cy="183.8" rx="53.02" ry="183.8"
+        ></ellipse><ellipse
+          class="ec"
+          cx="183.8"
+          cy="183.8"
+          rx="53.02"
+          ry="183.8"
+          transform="translate(-76.13 183.8) rotate(-45)"></ellipse><ellipse
+          class="ec"
+          cx="183.8"
+          cy="183.8"
+          rx="183.8"
+          ry="53.02"></ellipse><ellipse
+          class="ec"
+          cx="183.8"
+          cy="183.8"
+          rx="183.8"
+          ry="53.02"
+          transform="translate(-76.13 183.8) rotate(-45)"></ellipse></svg
+      >
+      <span class='logo-text'>Astro-notion</span>
     </a>
   </div>
   <div class='navigation'>
@@ -35,14 +63,23 @@ import { Icon } from 'astro-icon'
 
     .title {
       font-size: var(--size-4);
-    }
+      
+      .logo {
+        display: flex;
+        gap: var(--size-2);
 
+        .logo-svg {
+          width: var(--size-5);
+        }
+        
+      }
+    }
 
     .navigation {
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: var(--size-8);
+      gap: var(--size-6);
 
       .btn {
         display: flex;
@@ -80,6 +117,14 @@ import { Icon } from 'astro-icon'
           border: 1px solid rgba(0, 0, 0, 0.2);
           border-radius: 4px;
           margin-left: var(--size-2);
+        }
+      }
+    }
+
+    @media (max-width: 425px) {
+        .logo {
+        .logo-text {
+          display: none;
         }
       }
     }
