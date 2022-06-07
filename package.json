@@ -1,11 +1,8 @@
 {
+  "type": "module",
   "private": true,
   "description": "The root directory for astro-notion package",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "workspaces": [
-    "demo",
-    "packages/*"
-  ]
+  }
 }

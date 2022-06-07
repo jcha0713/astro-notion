@@ -2,19 +2,18 @@
 import PostLayout from '../../layouts/PostLayout.astro';
 import PostHeader from '../../components/PostHeader.astro';
 
-import { generateStaticPaths } from '@jcha0713/astro-notion/api'
-import { Notion } from '@jcha0713/astro-notion/components'
+import { generateStaticPaths } from '@jcha0713/astro-notion/api';
+import { Notion } from '@jcha0713/astro-notion/components';
 
 export async function getStaticPaths() {
-  const data = await generateStaticPaths()
-  return data
+  const data = await generateStaticPaths();
+  return data;
 }
 
 const { post: postUrl } = Astro.params;
 const { pages, pageData, blocks } = Astro.props;
 
-console.log(pageData)
-
+console.log(pageData);
 ---
 
 <PostLayout {pages} {pageData} {postUrl}>
@@ -24,7 +23,7 @@ console.log(pageData)
   </article>
 </PostLayout>
 
-<style lang='scss'>
+<style lang="scss">
   article > * {
     line-height: 1.625;
   }

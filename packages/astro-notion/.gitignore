@@ -19,4 +19,5 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# personal files
 devlog.md

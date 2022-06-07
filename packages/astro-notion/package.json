@@ -1,7 +1,8 @@
 {
   "name": "@jcha0713/astro-notion",
   "description": "Data fetching tool that connects Astro and Notion",
-  "version": "0.1.1",
+  "type": "module",
+  "version": "0.1.2",
   "license": "MIT",
   "exports": {
     "./api": "./api/index.js",
@@ -12,7 +13,11 @@
     "astro",
     "astro-component"
   ],
-  "author": "Joohoon Cha <joocha0713@gmail.com> (https://jhcha.app)",
+  "author": {
+    "name": "Joohoon Cha",
+    "email": "joocha0713@gmail.com",
+    "url": "https://jhcha.app"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
