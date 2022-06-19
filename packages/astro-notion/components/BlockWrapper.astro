@@ -13,7 +13,7 @@ const listTypes = new Set([
   'to_do',
 ]);
 
-const { block } = Astro.props
+const { block, color } = Astro.props
 const blockType = block.type
 const tagName = getCorrectTagName(block, blockType);
 
@@ -21,15 +21,15 @@ const tagName = getCorrectTagName(block, blockType);
 
 <Fragment>
   {blockType === 'callout' && (
-    <Callout {block} />
+    <Callout {block} {color} />
   )}
 
   {(blockType === 'toggle' || toggleTypes.has(tagName)) && (
-    <Toggle {block} />
+    <Toggle {block} {color} />
   )}
 
   {listTypes.has(blockType) && (
-    <Text as={tagName} {block}>
+    <Text as={tagName} {block} {color}>
       {block.has_children && (
         <Notion blocks={block[blockType].children} />
       )}

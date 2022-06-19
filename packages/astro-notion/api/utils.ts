@@ -23,45 +23,29 @@ export function isSupportedBlockType(type) {
   return supportedBlockTypes.has(type);
 }
 
-export function getClassAttributes(blockObj, type = '') {
-  let classes = type ? [`notion-${type}`] : [];
-  if (blockObj?.classList?.length > 0) {
-    classes = [...classes, ...blockObj?.classList];
+export function getClassAttributes(blockObj) {
+  let classes = [];
+  let filtered = Object.keys(blockObj.annotations)
+    .filter((key) => blockObj.annotations[key] && key !== 'color')
+    .map((attr) => `notion-${attr}`);
+  classes = [...filtered];
+  if (blockObj.href) {
+    classes.push('notion-link');
   }
+  console.log(classes);
   return classes.length > 0 ? `class='${classes.join(' ')}'` : '';
 }
 
-export function setClassAttributes(block, objType) {
-  let textObjs = block[block.type][objType];
+export function getStyles(blockObj) {
+  const color = getColor(blockObj.annotations?.color);
+  return getStyleString(color);
+}
 
-  function getClassArray(textObj) {
-    let attrs = [];
-    const annotations = textObj?.annotations;
-    if (!annotations) {
-      return attrs;
-    }
-    for (const style in annotations) {
-      if (annotations[style]) {
-        style !== 'color' && attrs.push(`notion-${style}`);
-      }
-    }
-    return attrs;
+export function getStyleString(styleObj) {
+  if (!styleObj) {
+    return [];
   }
-
-  if (textObjs.length > 0) {
-    if (textObjs.length > 1) {
-      textObjs = textObjs.map((textObj) => {
-        return {
-          ...textObj,
-          classList: getClassArray(textObj),
-        };
-      });
-    } else {
-      textObjs[0]['classList'] = getClassArray(textObjs[0]);
-    }
-  }
-
-  return textObjs;
+  return Object.keys(styleObj).map((key) => `${key}: ${styleObj[key]}`);
 }
 
 // A helper function that grabs correct HTML element name
@@ -88,6 +72,41 @@ export function getCorrectTagName(block, type: string): string {
     bookmark: 'p',
   };
   return correctTagName[type];
+}
+
+export function getColor(color) {
+  if (typeof color !== 'string') {
+    return '';
+  }
+
+  const correctColor = {
+    gray: '#787774',
+    brown: '#9f6b53',
+    orange: '#d9730d',
+    yellow: '#cb912f',
+    green: '#448361',
+    blue: '#337ea9',
+    purple: '#9065b0',
+    pink: '#c14c8a',
+    red: '#d44c47',
+    gray_background: '#f1f1ef',
+    brown_background: '#f4eeee',
+    orange_background: '#fbecdd',
+    yellow_background: '#fbf3db',
+    green_background: '#edf3ec',
+    blue_background: '#e7f3f8',
+    purple_background: 'rgba(244, 240, 247, 0.8)',
+    pink_background: 'rgba(249, 238, 243, 0.8)',
+    red_background: '#fdebec',
+  };
+
+  if (color === 'default') {
+    return '';
+  }
+  if (color.endsWith('background')) {
+    return { 'background-color': correctColor[color] };
+  }
+  return { color: correctColor[color] };
 }
 
 export async function downloadFile(url, targetDir, targetFile) {

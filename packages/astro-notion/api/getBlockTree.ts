@@ -1,5 +1,5 @@
 import { getBlockChildren } from './getBlockChildren';
-import { isSupportedBlockType } from './utils'
+import { isSupportedBlockType } from './utils';
 
 const listTypes = new Set([
   'bulleted_list_item',
@@ -24,7 +24,7 @@ async function addChildrenBlocks(id: string) {
       if (!isSupportedBlockType(type)) {
         console.warn(
           `${type} blocks are not supported in this version of astro-notion and will not be rendered.`
-        )
+        );
         return '';
       }
 

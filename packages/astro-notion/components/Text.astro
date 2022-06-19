@@ -2,34 +2,33 @@
 import List from './List.astro';
 import InlineCode from './InlineCode.astro';
 import '../styles/global.css'
-import { getClassAttributes, setClassAttributes } from '../api/utils.ts'
-const { as: Text = 'p', block } = Astro.props;
+import { getStyles, getStyleString, getClassAttributes } from '../api/utils.ts'
+const { as: Text = 'p', block, color } = Astro.props;
 
 let objType: string;
 Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
 let blockObjs = block[block.type][objType]
 
-blockObjs = setClassAttributes(block, objType)
-
-const getLink = (blockObj) => {
-  return (
-    `<a href=${blockObj.href} ${getClassAttributes(blockObj, 'link')} >${blockObj.plain_text}</a>`
-  )
-}
 
 const getText = (blockObj) => {
+
   let text = blockObj.plain_text
+  const styles = getStyles(blockObj)
 
   const classAttributes = getClassAttributes(blockObj)
 
-  if (classAttributes) {
-    text = `<span ${classAttributes}>${blockObj.plain_text}</span>`;
+  if (blockObj.href) {
+    return `<a style='${styles}' href=${blockObj.href} ${getClassAttributes(blockObj)} >${text}</a>`
+  }
+
+  if (classAttributes || styles.length > 0) {
+    text = `<span style='${styles}' ${classAttributes}>${blockObj.plain_text}</span>`;
   }
 
   if (block.type === 'to_do') {
     text = `
       <input type="checkbox" id="todo" name="todo" ${block[block.type].checked ? 'checked' : ''} />
-      <label ${classAttributes} for="todo">${blockObj.plain_text}</label>
+      <label style='${styles}' ${classAttributes} for="todo">${blockObj.plain_text}</label>
     `
   }
 
@@ -39,13 +38,13 @@ const getText = (blockObj) => {
 ---
 
 <List {block} is_first={true} />
-<Text class:list={'notion-' + Text}>
+<Text style={`${getStyleString(color)}`} class:list={'notion-' + Text}>
   {
     blockObjs.map((blockObj) => {
       return (
         blockObj?.annotations.code
         ? <InlineCode text={blockObj.plain_text} />
-        : <Fragment set:html={`${blockObj.href ? getLink(blockObj) : getText(blockObj)}`}></Fragment>
+        : <Fragment set:html={getText(blockObj)}></Fragment>
       )
     })
   }

@@ -3,7 +3,7 @@ import Code from './Code.astro';
 import Text from './Text.astro';
 import NonText from './NonText.astro'
 import BlockWrapper from './BlockWrapper.astro'
-import { getCorrectTagName } from '../api/utils.ts'
+import { getColor, getCorrectTagName } from '../api/utils.ts'
 
 const textTypes = new Set(['h1', 'h2', 'h3', 'p', 'li', 'blockquote', 'pre', 'div', 'summary']);
 const needWrapper = new Set(['bookmark', 'callout', 'bulleted_list_item', 'numbered_list_item', 'toggle'])
@@ -19,13 +19,16 @@ const { blocks } = Astro.props
     if (!tagName) {
       return;
     }
+
+    const color = getColor(block[blockType]?.color)
+
     return (
       needWrapper.has(blockType) || block?.has_children
-      ? <BlockWrapper {block} />
+      ? <BlockWrapper {block} {color} />
       : blockType === 'code'
         ? <Code {block} />
         : textTypes.has(tagName)
-          ? <Text as={tagName} {block} />
+          ? <Text as={tagName} {block} {color} />
           : <NonText as={tagName} {block} />
     )
   })

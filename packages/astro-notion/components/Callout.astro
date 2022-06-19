@@ -1,13 +1,14 @@
 ---
 import Notion from './Notion.astro';
 import Text from './Text.astro';
-import { getCorrectTagName } from '../api/utils.ts'
-const { block } = Astro.props;
+import { getStyleString, getCorrectTagName } from '../api/utils.ts'
+const { block, color } = Astro.props;
 const blockType = block.type
 const tagName = getCorrectTagName(block, blockType);
+
 ---
 
-<div class="notion-callout-wrapper">
+<div style={`${getStyleString(color)}`} class="notion-callout-wrapper">
   <span class="notion-callout-icon">{block[block.type].icon.emoji}</span>
   <div class="notion-callout-content">
     <Text as={tagName} {block}>

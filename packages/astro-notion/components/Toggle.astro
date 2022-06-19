@@ -1,13 +1,15 @@
 ---
 import Notion from './Notion.astro';
 import Text from './Text.astro';
-import { getCorrectTagName } from '../api/utils.ts'
+import { getStyleString, getCorrectTagName } from '../api/utils.ts'
 
-const { block } = Astro.props
+const { block, color } = Astro.props
 const blockType = block.type
 const tagName = getCorrectTagName(block, blockType);
+
 ---
-<details class="notion-toggle-wrapper">
+
+<details style={`${getStyleString(color)}`} class="notion-toggle-wrapper">
   <summary class="notion-toggle-header">
     <Text as={tagName} {block} />
   </summary>
