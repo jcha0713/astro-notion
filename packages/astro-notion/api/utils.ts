@@ -32,7 +32,6 @@ export function getClassAttributes(blockObj) {
   if (blockObj.href) {
     classes.push('notion-link');
   }
-  console.log(classes);
   return classes.length > 0 ? `class='${classes.join(' ')}'` : '';
 }
 
@@ -43,9 +42,11 @@ export function getStyles(blockObj) {
 
 export function getStyleString(styleObj) {
   if (!styleObj) {
-    return [];
+    return '';
   }
-  return Object.keys(styleObj).map((key) => `${key}: ${styleObj[key]}`);
+  return Object.keys(styleObj)
+    .map((key) => `${key}: ${styleObj[key]}`)
+    .join(' ');
 }
 
 // A helper function that grabs correct HTML element name
@@ -80,6 +81,7 @@ export function getColor(color) {
   }
 
   const correctColor = {
+    // default Notion colors
     gray: '#787774',
     brown: '#9f6b53',
     orange: '#d9730d',
