@@ -15,6 +15,7 @@ const { blocks } = Astro.props
 {
   blocks.map(block => {
     const blockType = block.type
+
     let tagName = getCorrectTagName(block, blockType);
     if (!tagName) {
       return;

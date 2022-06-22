@@ -3,44 +3,55 @@ import List from './List.astro';
 import InlineCode from './InlineCode.astro';
 import '../styles/global.css'
 import { getStyles, getStyleString, getClassAttributes } from '../api/utils.ts'
-const { as: Text = 'p', block, color } = Astro.props;
+const { block, color } = Astro.props;
+let { as: Text = 'p' } = Astro.props;
 
 let objType: string;
-Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
-let blockObjs = block[block.type][objType]
+const style = getStyleString(color)
 
+Text === 'figcaption' ? objType = 'caption' : objType = 'rich_text'
+const blockObjs = block[block.type][objType]
 
 const getText = (blockObj) => {
-
   let text = blockObj.plain_text
-  const styles = getStyles(blockObj)
+  const style = getStyles(blockObj)
 
   const classAttributes = getClassAttributes(blockObj)
 
   if (blockObj.href) {
-    return `<a style='${styles}' href=${blockObj.href} ${getClassAttributes(blockObj)} >${text}</a>`
+    return `<a ${style && `style='${style}'`} href=${blockObj.href} ${getClassAttributes(blockObj)}>${text}</a>`
   }
 
-  if (classAttributes || styles.length > 0) {
-    text = `<span style='${styles}' ${classAttributes}>${blockObj.plain_text}</span>`;
+  if (classAttributes || style) {
+    text = `<span ${style && `style='${style}'`} ${classAttributes}>${blockObj.plain_text}</span>`;
   }
 
   if (block.type === 'to_do') {
     text = `
       <input type="checkbox" id="todo" name="todo" ${block[block.type].checked ? 'checked' : ''} />
-      <label style='${styles}' ${classAttributes} for="todo">${blockObj.plain_text}</label>
+      <label ${style && `style='${style}'`} ${classAttributes} for="todo">${blockObj.plain_text}</label>
     `
   }
 
   return text
 }
 
+// if rich_text is empty, render <br>
+if (blockObjs.length === 0) {
+  Text = 'br'
+}
+
+const styleProp = {
+  ...(style !== '' && {style})
+};
+
 ---
 
 <List {block} is_first={true} />
-<Text style={`${getStyleString(color)}`} class:list={'notion-' + Text}>
+<Text {...styleProp} class:list={'notion-' + Text}>
   {
     blockObjs.map((blockObj) => {
+
       return (
         blockObj?.annotations.code
         ? <InlineCode text={blockObj.plain_text} />
