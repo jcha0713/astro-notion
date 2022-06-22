@@ -1,24 +1,36 @@
 ---
-const { pageData } = Astro.props
+const { pageData } = Astro.props;
 
-const date = new Date(pageData.date.created)
+const date = new Date(pageData.date.created);
 
-const months = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 const formatDate = (date: Date) => {
-  return `${months[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`
-}
-
+  return `${
+    months[date.getUTCMonth()]
+  } ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+};
 ---
 
 <div class="header">
-  <h1 class='title'>{pageData.properties.title}</h1>
-  <p class='date'>{formatDate(date)}</p>
+  <h1 class="title">{pageData.properties.title}</h1>
+  <p class="date">{formatDate(date)}</p>
 </div>
 
-<style lang='scss'>
+<style lang="scss">
   .header {
     display: flex;
     flex-direction: column;
