@@ -11,7 +11,7 @@ let blockObjs = block[block.type]['rich_text']
   {block[block.type].language !== 'plain text' && 
     blockObjs.map(blockObj => {
       return (
-        <Code code={blockObj.plain_text} lang={block[block.type].language} theme='dark-plus' />
+        <Code code={blockObj.plain_text} lang={block[block.type].language} theme='dark-plus' wrap />
       )
   })}
 
@@ -19,4 +19,3 @@ let blockObjs = block[block.type]['rich_text']
     <Text as={'pre'} {block} />
   )}
 </Fragment>
-

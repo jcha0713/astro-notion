@@ -4,8 +4,7 @@
 }
 
 .notion-li {
-  list-style: inside;
-  padding: 0 var(--size-4);
+  padding: var(--size-1);
 }
 
 .notion-callout-wrapper {
@@ -33,6 +32,7 @@
   background-color: #f9f9f9;
   padding: var(--size-2);
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .notion-toggle-wrapper[open] summary {
@@ -64,6 +64,7 @@
   background-color: gainsboro;
   padding: var(--size-1) var(--size-2);
   border-radius: 4px;
+  font-size: 0.8em;
 }
 
 .notion-image-wrapper {
@@ -71,8 +72,21 @@
   margin: var(--size-4) 0;
 }
 
-.notion-pre {
+.astro-code, .notion-pre {
   font-family: var(--font-mono);
   white-space: pre-wrap;
   word-break: break-word;
+  margin: var(--size-4) 0;
+  padding: var(--size-6) var(--size-4);
+  font-size: 0.8em; 
+  border-radius: var(--size-2);
+}
+
+.notion-iframe {
+  width: 100%;
+  height: 500px;
+}
+
+.notion-link {
+  text-decoration: underline;
 }

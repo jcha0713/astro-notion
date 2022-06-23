@@ -107,28 +107,35 @@ import { Icon } from 'astro-icon'
       }
     }
 
+  }
+
     @media (max-width: 768px) {
-      .navigation {
-        gap: var(--size-3);
-        .link {
-          display: none;
-        }
-        .btn {
-          background-color: inherit;
-          outline: 1px solid rgba(0, 0, 0, 0.2);
-          border-radius: 4px;
-          margin-left: var(--size-2);
+      nav {
+        margin: 0 0 var(--size-2) 0; 
+        .navigation {
+          gap: var(--size-3);
+          .link {
+            display: none;
+          }
+          .btn {
+            background-color: inherit;
+            outline: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            margin-left: var(--size-2);
+          }
         }
       }
     }
 
     @media (max-width: 425px) {
+      nav {
         .logo {
-        .logo-text {
-          display: none;
+          .logo-text {
+            display: none;
+          }
         }
       }
     }
 
-  }
+
 </style>
