@@ -50,6 +50,7 @@ if (NonText !== 'hr') {
         <Img
         src={filePath}
         alt={`${fileObj.caption[0]?.plain_text || 'An image from notion'}`}
+        breakpoints={{ maxWidth: 3840 }}
         loading="lazy"
         attributes={{
           img: {
