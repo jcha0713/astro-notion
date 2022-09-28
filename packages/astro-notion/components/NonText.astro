@@ -2,6 +2,7 @@
 import Text from './Text.astro';
 import { Img } from 'astro-imagetools/components';
 import { downloadFile } from '../api/utils.ts'
+import urlParser from 'js-video-url-parser';
 const { as: NonText, block } = Astro.props;
 
 const contentType = block.type
@@ -26,8 +27,8 @@ if (fileType === 'external') {
   const getCleanUrl = (url: string) => {
     const cleanUrl = url.split('?')
     if (contentType === 'video') {
-      const youtubeUrl = cleanUrl[0].replace(/\.be\//, 'be.com/embed/')
-      return youtubeUrl
+      const videoEmbedUrl = urlParser.create({videoInfo: urlParser.parse(url), format: 'embed'});
+      return videoEmbedUrl
     }
     return cleanUrl[0]
   }
