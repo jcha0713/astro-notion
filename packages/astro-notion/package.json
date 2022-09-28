@@ -2,7 +2,7 @@
   "name": "@jcha0713/astro-notion",
   "description": "Data fetching tool that connects Astro and Notion",
   "type": "module",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "exports": {
     "./api": "./api/index.js",
